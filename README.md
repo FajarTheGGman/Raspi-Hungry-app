@@ -3,6 +3,8 @@
 
 ![](https://raw.githubusercontent.com/FajarTheGGman/Raspi-Hungry/master/.screenshot/banner3.png)
 
+![](https://img.shields.io/badge/Framework-ReactNative-blue?style=for-the-badge&logo=appveyor) ![](https://img.shields.io/badge/Version-1.0.0-lime?style=for-the-badge&logo=appveyor)
+
 # Screenshot
 
 - Android Application
