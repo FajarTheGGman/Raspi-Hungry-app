@@ -1,0 +1,219 @@
+import { StatusBar } from 'expo-status-bar';
+import React, { Component } from 'react';
+import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput } from 'react-native';
+import SwipeUpDown from 'react-native-swipe-up-down'
+import DialogInput from 'react-native-dialog-input'
+
+class SwipeMini extends Component{
+    render(){
+        return(
+            <View style={swipemini.parent}>
+                <Text style={swipemini.child}>Swipe Me up</Text>
+            </View>
+        )
+    }
+}
+
+class SwipeFull extends Component{
+constructor(props){
+    super(props);
+
+    this.state = {
+        ip: "",
+        dialog: true
+    }
+
+}
+
+temp(){
+    fetch("http://" + this.state.ip + "/temp").then(data => data.json()).then(x => {
+        alert(x)
+    })
+}
+
+honeypot(){
+    fetch('http://' + this.state.ip + "/honeypot").then(data => data.json()).then(x => {
+        var j = JSON.parse(x)
+        console.log(j['status'])
+    })
+}
+
+vnc(){
+    
+}
+
+dialogGenerate(inputIP){
+    const data = inputIP;
+    this.setState({ ip: data })
+    this.setState({ dialog: false })
+    
+    fetch("http://" + data).then(res => {
+        if(res.status == 200){
+            alert('[+] Successfully connected to your raspi')
+        }else{
+            alert('[-] Connection Error')
+        }
+    }).catch(err => {
+        alert('[!] Connection Error or Wrong IP')
+    })
+}
+
+
+
+    render(){
+        return(
+            <View style={swipefull.back}>
+                <Text style={swipefull.title}>Control Menu</Text>
+                <View style={swipefull.menu}>
+                    <TouchableOpacity style={{ width: 80, height: 80 }}>
+                        <Image source={require('./assets/menu/teminal.png')} style={swipefull.terminal}/>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={{ width: 80, height: 80 }}>
+                        <Image source={require('./assets/menu/honeypot.png')} style={swipefull.wifi}/>
+                    </TouchableOpacity>
+               </View>
+
+                <View style={swipefull.menu2}>
+                    <TouchableOpacity style={{ width: 80, height: 80 }}>
+                        <Image source={require("./assets/menu/vnc.png")} style={swipefull.vnc}/>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={{ width: 80, height: 80, marginRight: 45 }} onClick={this.temp}>
+                        <Image source={require("./assets/menu/temperature.png")} style={swipefull.temp}/>
+                    </TouchableOpacity>
+
+
+                    <DialogInput isDialogVisible={this.state.dialog} title={"Raspi IP"} message={"Plase input your raspberry pi IP"} hintInput={"Your IP"} submitInput={(data) => this.dialogGenerate(data)} closeDialog={() => this.setState({ dialog: false })}>
+                    </DialogInput>
+                </View>
+            </View>
+        )
+    }
+}
+
+export default class Default extends Component{
+    constructor(props){
+        super(props)
+        fetch('http://192.168.1.8:5000/connection').then(data => data.json()).then(d => {
+            console.log(x)
+        })
+    }
+
+render(){
+  return (
+    <View style={styles.container}>
+        <Text style={styles.bannerteks}>Raspi Hungry</Text>
+        <Image source={require('./assets/banner.png')} style={styles.banner}/>
+        <Text style={{ fontSize: 15 }}>@FajarTheGGman</Text>
+          <Text style={{ fontSize: 15 }}>{ "{ Version: '1.0.0' }" }</Text>
+        <SwipeUpDown itemMini={<SwipeMini />} itemFull={<SwipeFull/>} style={styles.swipe}/>
+      <StatusBar style="auto" />
+    </View>
+  );
+ }
+}
+
+const swipefull = StyleSheet.create({
+    back: {
+        marginTop: 25,
+        backgroundColor: 'white',
+        paddingBottom: 500,
+        borderRadius: 20,
+    },
+
+    input: {
+        flex:1,
+        flexDirection: "column",
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 225,
+    },
+
+    menu: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: "space-between"
+    },
+
+    wifi: {
+        width: 80,
+        height: 80,
+        marginLeft: -45,
+        marginTop: 30
+    },
+
+    menu2: {
+        flex: 1,
+        flexDirection: "row",
+        justifyContent: "space-between",
+        marginTop: 185
+    },
+
+    vnc: {
+        width: 90,
+        height: 90,
+        marginLeft: 40
+    },
+
+    temp: {
+        width: 90,
+        height: 90,
+        marginRight: 45
+    },
+
+    terminal: {
+        width: 80,
+        height: 80,
+        marginLeft: 45,
+        marginTop: 30
+    },
+
+    title: {
+        alignItems: "center",
+        textAlign: "center",
+        fontSize: 25,
+        color: 'white',
+        backgroundColor: "#1a1a1a",
+        borderBottomLeftRadius: 20,
+        borderBottomRightRadius: 20,
+        
+    }
+})
+
+const swipemini = StyleSheet.create({
+    parent: {
+        alignItems: "center"
+    },
+
+    child: {
+        color: "black",
+        backgroundColor: 'red',
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        padding: 4,
+        fontSize: 20
+    }
+})
+
+const styles = StyleSheet.create({
+    swipe:{
+        backgroundColor: '#1a1a1a'
+    },
+
+    bannerteks: {
+        fontSize: 25,
+        backgroundColor: 'black',
+        color: 'red',
+        padding: 10,
+        borderRadius: 15
+    },
+
+  container: {
+    flex: 1,
+    backgroundColor: '#b00002',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
+
